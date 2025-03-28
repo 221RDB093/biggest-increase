@@ -1,10 +1,13 @@
 # Skrastiņš Kristaps PD1
 
 """
-Algoritma loģikai iesākumā tika izmantots masīvs "test",
-kurš saturēja failā "ints_10.txt" esošās vērtības.
+Sākotnējā algoritma "brute force" versija bija visai neefektīva,
+jo tajā algoritms iterēja caur visiem skaitļiem vairākas reizes,
+savstarpēji salīdzinot katru skaitli ar visiem iespējamajiem 
+skaitļiem, kas atrodas tam "priekšā".
 
-Par failu nolasīšanu uztraukšos vēlāk
+Jaunais optimizētais algoritms nodrošina to, ka katrs skaitlis ciklā
+tiek apskatīts tikai vienu reizi.
 """
 
 ints = [] # saraksts, kurā glabāsies teksta faila vērtības
@@ -21,18 +24,21 @@ while True:
             
         break
     except FileNotFoundError:                       # izņēmums gadījumam, ja lietotāja ievade ir nederīga
-        print("Nepareiza ievade!")
-    
+        print("Pārbaudiet ievadi un to, vai fails atrodas tam paredzētajā vietā! (~/pd1_data/ints_[...].txt)")
 
-    
 
-maxRange = 0                                # mainīgais, kas saglabās maksimālo iespējamo intervālu
-for i in range(0, len(ints)):
-    for j in range(i+1, len(ints)):         # iterēju cauri visiem skaitļiem, no kuriem būs jāatņem skaitlis test[i] no iepriekšējā cikla  
-        currentRange = ints[j] - ints[i]
-        if currentRange > maxRange:         # pārbaudu, vai patreizējās iterācijas starpība ir lielāka par patreizējo lielāko starpību
-            mazinamais = ints[i]
-            mazinatajs = ints[j]            # ja jā, tad piefiksēju skaitļus, starp kuriem ir šī starpība
-            maxRange = currentRange         # un atjauninu lielāko starpību
-            
-print(f"lielākais intervāls ir {maxRange} starp skaitļiem {mazinamais} un {mazinatajs}")
+def biggest_increase(arr):
+    startValue = arr[0]  # Pieņemu, ka pirmais elements ir mazākais
+    maxRange = 0
+    for i in range(1, len(arr)):  # Iterēju caur masīva indeksiem (atskaitot nulto)
+        num = arr[i] # num = patreizējā (šīs iterācijas) masīva elementa vērtība
+        
+        if num - startValue > maxRange: # ja starpība ir starp patreizējo un sākuma skaitli ir lielāka par maksimālo, tad 
+            maxRange = num - startValue # turpmāk tā tiks uzskatīta par maksimālo
+        if num < startValue: # ja patreizējais skaitlis ir mazāks par sākumskaitli, tad turpmāk šis skaitlis tiks uzskatīts par mazāko
+            startValue = num
+    return maxRange
+
+
+
+print(biggest_increase(ints))
